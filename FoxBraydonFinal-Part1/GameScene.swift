@@ -72,7 +72,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(launcher)
         
         scoreLabel.text = "Score: 0"
-        scoreLabel.fontSize = 30
+        scoreLabel.fontSize = 50
         scoreLabel.fontColor = SKColor.black
         scoreLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
         scoreLabel.position = CGPoint(x: self.size.width * 0.5, y: self.size.height * 0.9)
@@ -80,6 +80,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.isHidden = true
         self.addChild(scoreLabel)
         
+        restartButton.setScale(0.5)
         restartButton.position = CGPoint(x: self.size.width * 0.5, y: self.size.height * 0.5)
         restartButton.zPosition = 100
         restartButton.name = "restartButton"
@@ -127,6 +128,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         gameScore = 0
         
+        scoreLabel.isHidden = true
         restartButton.isHidden = true
         
         if self.action(forKey: "spawningObjects") != nil {
@@ -156,6 +158,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             restartButton.isHidden = false
             scoreLabel.isHidden = false
             countdown = 30
+            timer.invalidate()
         }
     }
     
