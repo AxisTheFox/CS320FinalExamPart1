@@ -11,10 +11,15 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
+    var gameOver: Bool = false
+    
     var gameScore = 0
     let scoreLabel = SKLabelNode()
+    
     var timer = Timer()
     var countdown = 30
+    
+    let restartButton = SKSpriteNode(imageNamed: "refresh")
     
     let launcher = SKSpriteNode(imageNamed: "red-circle")
     
@@ -69,11 +74,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.text = "Score: 0"
         scoreLabel.fontSize = 30
         scoreLabel.fontColor = SKColor.black
-        scoreLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
-        scoreLabel.position = CGPoint(x: self.size.width * 0.1, y: self.size.height * 0.9)
+        scoreLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
+        scoreLabel.position = CGPoint(x: self.size.width * 0.5, y: self.size.height * 0.9)
         scoreLabel.zPosition = 100
         scoreLabel.isHidden = true
         self.addChild(scoreLabel)
+        
+        restartButton.position = CGPoint(x: self.size.width * 0.5, y: self.size.height * 0.5)
+        restartButton.zPosition = 100
+        restartButton.name = "restartButton"
+        restartButton.isHidden = true
+        addChild(restartButton)
         
         startNewLevel()
         
@@ -112,6 +123,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func startNewLevel() {
         
+        gameOver = false
+        
+        gameScore = 0
+        
+        restartButton.isHidden = true
+        
         if self.action(forKey: "spawningObjects") != nil {
             self.removeAction(forKey: "spawningObjects")
         }
@@ -129,6 +146,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if countdown > 0 {
             countdown -= 1
         } else {
+            gameOver = true
+            self.removeAction(forKey: "spawningObjects")
+            for child in self.children {
+                if child.physicsBody?.categoryBitMask == PhysicsCategories.Object || child.physicsBody?.categoryBitMask == PhysicsCategories.Projectile {
+                    removeFromParent()
+                }
+            }
+            restartButton.isHidden = false
+            scoreLabel.isHidden = false
             countdown = 30
         }
     }
@@ -185,7 +211,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             let pointOfTouch = touch.location(in: self)
             
-            launchProjectileTo(location: pointOfTouch)
+            if (!gameOver) {
+                
+                launchProjectileTo(location: pointOfTouch)
+                
+            } else {
+                
+                let sprites = nodes(at: pointOfTouch)
+                
+                for sprite in sprites {
+                    
+                    if let spriteNode = sprite as? SKSpriteNode {
+                        
+                        if spriteNode.name != nil {
+                            
+                            if spriteNode.name == "restartButton" {
+                                
+                                startNewLevel()
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
             
         }
         
