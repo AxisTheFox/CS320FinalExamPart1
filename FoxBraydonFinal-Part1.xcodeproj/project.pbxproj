@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		84C61BFF1DFCBF0F003953C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C61BFE1DFCBF0F003953C9 /* AppDelegate.swift */; };
-		84C61C011DFCBF0F003953C9 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 84C61C001DFCBF0F003953C9 /* GameScene.sks */; };
-		84C61C031DFCBF0F003953C9 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 84C61C021DFCBF0F003953C9 /* Actions.sks */; };
 		84C61C051DFCBF0F003953C9 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C61C041DFCBF0F003953C9 /* GameScene.swift */; };
 		84C61C071DFCBF0F003953C9 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C61C061DFCBF0F003953C9 /* GameViewController.swift */; };
 		84C61C0A1DFCBF0F003953C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84C61C081DFCBF0F003953C9 /* Main.storyboard */; };
@@ -39,8 +37,6 @@
 /* Begin PBXFileReference section */
 		84C61BFB1DFCBF0F003953C9 /* FoxBraydonFinal-Part1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FoxBraydonFinal-Part1.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		84C61BFE1DFCBF0F003953C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		84C61C001DFCBF0F003953C9 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
-		84C61C021DFCBF0F003953C9 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
 		84C61C041DFCBF0F003953C9 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		84C61C061DFCBF0F003953C9 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		84C61C091DFCBF0F003953C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -104,8 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				84C61BFE1DFCBF0F003953C9 /* AppDelegate.swift */,
-				84C61C001DFCBF0F003953C9 /* GameScene.sks */,
-				84C61C021DFCBF0F003953C9 /* Actions.sks */,
 				84C61C041DFCBF0F003953C9 /* GameScene.swift */,
 				84C61C061DFCBF0F003953C9 /* GameViewController.swift */,
 				84C61C081DFCBF0F003953C9 /* Main.storyboard */,
@@ -242,10 +236,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				84C61C0A1DFCBF0F003953C9 /* Main.storyboard in Resources */,
-				84C61C011DFCBF0F003953C9 /* GameScene.sks in Resources */,
 				84C61C0C1DFCBF0F003953C9 /* Assets.xcassets in Resources */,
 				84C61C0F1DFCBF0F003953C9 /* LaunchScreen.storyboard in Resources */,
-				84C61C031DFCBF0F003953C9 /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,6 +415,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "FoxBraydonFinal-Part1/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "bsu.edu.FoxBraydonFinal-Part1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -435,6 +428,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "FoxBraydonFinal-Part1/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "bsu.edu.FoxBraydonFinal-Part1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -515,6 +509,7 @@
 				84C61C2B1DFCBF0F003953C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		84C61C2C1DFCBF0F003953C9 /* Build configuration list for PBXNativeTarget "FoxBraydonFinal-Part1Tests" */ = {
 			isa = XCConfigurationList;
@@ -523,6 +518,7 @@
 				84C61C2E1DFCBF0F003953C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		84C61C2F1DFCBF0F003953C9 /* Build configuration list for PBXNativeTarget "FoxBraydonFinal-Part1UITests" */ = {
 			isa = XCConfigurationList;
@@ -531,6 +527,7 @@
 				84C61C311DFCBF0F003953C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
