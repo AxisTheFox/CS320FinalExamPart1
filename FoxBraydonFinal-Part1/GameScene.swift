@@ -9,9 +9,30 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+    var gameScore = 0
+    let scoreLabel = SKLabelNode()
+    var timer = Timer()
+    var countdown = 30
     
     let launcher = SKSpriteNode(imageNamed: "red-circle")
+    
+    struct PhysicsCategories {
+        
+        static let None : UInt32 = 0            // 0
+        static let Projectile : UInt32 = 0b1    // 1
+        static let Object : UInt32 = 0b10       // 2
+        
+    }
+    
+    func random() -> CGFloat {
+        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+    }
+    
+    func random(min: CGFloat, max: CGFloat) -> CGFloat {
+        return random() * (max - min) + min
+    }
     
     let gameArea: CGRect
     
@@ -32,6 +53,8 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
+        self.physicsWorld.contactDelegate = self
+        
         let background = SKSpriteNode(imageNamed: "background")
         background.size = self.size
         background.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
@@ -43,6 +66,71 @@ class GameScene: SKScene {
         launcher.zPosition = 2
         self.addChild(launcher)
         
+        scoreLabel.text = "Score: 0"
+        scoreLabel.fontSize = 30
+        scoreLabel.fontColor = SKColor.black
+        scoreLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+        scoreLabel.position = CGPoint(x: self.size.width * 0.1, y: self.size.height * 0.9)
+        scoreLabel.zPosition = 100
+        scoreLabel.isHidden = true
+        self.addChild(scoreLabel)
+        
+        startNewLevel()
+        
+    }
+    
+    func addScore() {
+        
+        gameScore += 1
+        scoreLabel.text = "Score: \(gameScore)"
+        
+        
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        
+        var body1 = SKPhysicsBody()
+        var body2 = SKPhysicsBody()
+        
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            body1 = contact.bodyA
+            body2 = contact.bodyB
+        } else {
+            body1 = contact.bodyB
+            body2 = contact.bodyA
+        }
+        
+        if body1.categoryBitMask == PhysicsCategories.Projectile && body2.categoryBitMask == PhysicsCategories.Object {
+            
+            // If projectile has hit the object
+            addScore()
+            body1.node?.removeFromParent()
+            body2.node?.removeFromParent()
+            
+        }
+    }
+    
+    func startNewLevel() {
+        
+        if self.action(forKey: "spawningObjects") != nil {
+            self.removeAction(forKey: "spawningObjects")
+        }
+        
+        let spawn = SKAction.run(spawnObject)
+        let waitToSpawn = SKAction.wait(forDuration: 0.7)
+        let spawnSequence = SKAction.sequence([waitToSpawn, spawn])
+        let spawnForever = SKAction.repeatForever(spawnSequence)
+        self.run(spawnForever, withKey: "spawningObjects")
+        
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(GameScene.updateTimer), userInfo: nil, repeats: true)
+    }
+    
+    func updateTimer() {
+        if countdown > 0 {
+            countdown -= 1
+        } else {
+            countdown = 30
+        }
     }
     
     func launchProjectileTo(location: CGPoint) {
@@ -51,9 +139,14 @@ class GameScene: SKScene {
         projectile.setScale(0.1)
         projectile.position = launcher.position
         projectile.zPosition = 1
+        projectile.physicsBody = SKPhysicsBody(circleOfRadius: projectile.size.width / 2)
+        projectile.physicsBody!.affectedByGravity = false
+        projectile.physicsBody!.categoryBitMask = PhysicsCategories.Projectile
+        projectile.physicsBody!.collisionBitMask = PhysicsCategories.None
+        projectile.physicsBody!.contactTestBitMask = PhysicsCategories.Object
         self.addChild(projectile)
         
-        let moveProjectile = SKAction.move(to: location, duration: 0.75)
+        let moveProjectile = SKAction.move(to: location, duration: 0.4)
         let deleteProjectile = SKAction.removeFromParent()
         
         let projectileSequence = SKAction.sequence([moveProjectile, deleteProjectile])
@@ -63,7 +156,26 @@ class GameScene: SKScene {
     
     func spawnObject() {
         
+        let randomXPosition = random(min: gameArea.minX, max: gameArea.maxX)
         
+        let startPoint = CGPoint(x: randomXPosition, y: self.size.height * 1.2)
+        let endPoint = CGPoint(x: randomXPosition, y: 0 - self.size.height * 1.2)
+        
+        let object = SKSpriteNode(imageNamed: "blue-circle")
+        object.setScale(0.25)
+        object.position = startPoint
+        object.zPosition = 2
+        object.physicsBody = SKPhysicsBody(circleOfRadius: object.size.width / 2)
+        object.physicsBody!.affectedByGravity = false
+        object.physicsBody!.categoryBitMask = PhysicsCategories.Object
+        object.physicsBody!.collisionBitMask = PhysicsCategories.None
+        object.physicsBody!.contactTestBitMask = PhysicsCategories.Projectile
+        self.addChild(object)
+        
+        let moveObject = SKAction.move(to: endPoint, duration: 6.0)
+        let deleteObject = SKAction.removeFromParent()
+        let objectSequence = SKAction.sequence([moveObject, deleteObject])
+        object.run(objectSequence)
         
     }
     
@@ -72,6 +184,7 @@ class GameScene: SKScene {
         for touch: AnyObject in touches {
             
             let pointOfTouch = touch.location(in: self)
+            
             launchProjectileTo(location: pointOfTouch)
             
         }
